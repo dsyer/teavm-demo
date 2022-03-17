@@ -41,6 +41,19 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>target/js</directory>
+				<targetPath>static</targetPath>
+			</resource>
+			<resource>
+				<directory>target/candies</directory>
+				<targetPath>static/candies</targetPath>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -53,8 +66,8 @@
 				<configuration>
 					<verbose>true</verbose>
 					<tsOut>target/ts</tsOut>
-					<outDir>target/classes/static</outDir>
-					<candiesJsOut>webapp/candies</candiesJsOut>
+					<outDir>target/js</outDir>
+					<candiesJsOut>target/candies</candiesJsOut>
 					<targetVersion>ES6</targetVersion>
 					<module>none</module>
 					<moduleResolution>classic</moduleResolution>
