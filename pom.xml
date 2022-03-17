@@ -53,21 +53,13 @@
 	</dependencies>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>target/generated-resources/js</directory>
-				<targetPath>static</targetPath>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
+				<?m2e execute onConfiguration,onIncremental?>
 				<groupId>org.teavm</groupId>
 				<artifactId>teavm-maven-plugin</artifactId>
 				<version>${teavm.version}</version>
@@ -78,7 +70,7 @@
 							<goal>compile</goal>
 						</goals>
 						<configuration>
-							<targetDirectory>${project.build.directory}/generated-resources/js</targetDirectory>
+							<targetDirectory>${project.build.directory}/classes/static</targetDirectory>
 							<mainClass>com.example.demo.Sweet</mainClass>
 							<debugInformationGenerated>true</debugInformationGenerated>
 						</configuration>
@@ -87,42 +79,6 @@
 			</plugin>
 
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.teavm
-										</groupId>
-										<artifactId>
-											teavm-maven-plugin
-										</artifactId>
-										<versionRange>
-											[0.0.1,)
-										</versionRange>
-										<goals>
-											<goal>compile</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 
 </project>
