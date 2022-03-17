@@ -1,17 +1,14 @@
 package com.example.demo;
 
-import def.dom.HTMLCollectionOf;
-import def.dom.HTMLDivElement;
-import jsweet.util.StringTypes;
-
-import static def.dom.Globals.document;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Sweet {
+
+	private static List<String> values = Arrays.asList("Hello", "World");
 	
-	public static void main(String[] args) {
-		HTMLCollectionOf<HTMLDivElement> nodeList = document.getElementsByTagName(StringTypes.div);
-		for (HTMLDivElement element : nodeList) {
-			element.innerText = "Hello again in vanilla JS";
-		}
+	public String hello() {
+		return values.stream().collect(Collectors.joining(" "));
 	}
 }

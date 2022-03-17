@@ -2,8 +2,12 @@
 
 <body>
 	<h2>Hello</h2>
-	<div></div>
+	<script src="/webjars/j4ts/2.1.0-SNAPSHOT/bundle.js"></script>
 	<script src="./com/example/demo/Sweet.js"></script>
+	<script>
+		var sweet = new com.example.demo.Sweet();
+		console.log(sweet.hello());
+	</script>
 </body>
 
 </html>
