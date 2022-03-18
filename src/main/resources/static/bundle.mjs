@@ -14,6 +14,7 @@ Function('return function(module, exports) {\n' +
 
 let hello = (...args) => main.exports.hello(args);
 let greet = () => main.exports.greet();
+let validate = (str) => main.exports.validate(str);
 
-export {greet, hello};
+export {greet, hello, validate};
 export default greet;

@@ -3,6 +3,7 @@ package com.example.demo;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.springframework.util.StringUtils;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 
@@ -22,6 +23,11 @@ public class HelloWorld implements Exports {
 		System.out.println(hello("Hello", "World"));
 	}
 
+	@Override
+	public boolean validate(String value) {
+		return StringUtils.hasText(value);
+	}
+
 	@JSBody(params = "arg", script = "main.exports = arg;")
 	public static native void export(Exports arg);
 }
@@ -29,4 +35,5 @@ public class HelloWorld implements Exports {
 interface Exports extends JSObject {
 	void greet();
 	String hello(String... args);
+	boolean validate(String value);
 }
