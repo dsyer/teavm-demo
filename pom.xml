@@ -71,7 +71,7 @@
 						</goals>
 						<configuration>
 							<targetDirectory>${project.build.directory}/classes/static</targetDirectory>
-							<mainClass>com.example.demo.Sweet</mainClass>
+							<mainClass>com.example.demo.HelloWorld</mainClass>
 							<debugInformationGenerated>true</debugInformationGenerated>
 						</configuration>
 					</execution>
