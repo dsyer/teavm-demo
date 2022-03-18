@@ -2,10 +2,10 @@
 
 <body>
 	<h2>Hello</h2>
-	<script src="./classes.js"></script>
-	<script>
-		main();
-		main.exported.greet();
+	<script type="module">
+		import { greet, hello } from './bundle.mjs';
+		greet();
+		console.log(hello());
 	</script>
 </body>
 
