@@ -70,6 +70,29 @@ TeaVM has an API you could use to transpile that Java, and it also has plugins t
 </plugin>
 ```
 
+along with some dependencies:
+
+```xml
+<dependency>
+	<groupId>org.teavm</groupId>
+	<artifactId>teavm-classlib</artifactId>
+	<version>${teavm.version}</version>
+	<scope>provided</scope>
+</dependency>
+<dependency>
+	<groupId>org.teavm</groupId>
+	<artifactId>teavm-jso-apis</artifactId>
+	<version>${teavm.version}</version>
+	<scope>provided</scope>
+</dependency>
+<dependency>
+	<groupId>org.teavm</groupId>
+	<artifactId>teavm-interop</artifactId>
+	<version>${teavm.version}</version>
+	<scope>provided</scope>
+</dependency>
+```
+
 It will fail for now because `HelloWorld` has no `main()` method. TeaVM only works to transpile `main()` methods, but we can work with that. Let's implement a `main()` method and see what happens:
 
 ```java
