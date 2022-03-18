@@ -229,7 +229,7 @@ export {greet, hello};
 export default greet;
 ```
 
-In Node.js we have to call the file `*.js`:
+In Node.js we have to call the file `*.mjs`:
 
 ```javascript
 > var main = await import('./target/classes/static/classes.mjs')
@@ -249,7 +249,7 @@ We would have to change the `index.html` to use the new module:
 <body>
 	<h2>Hello</h2>
 	<script type="module">
-		import { greet, hello } from './classes.js';
+		import { greet, hello } from './classes.mjs';
 		greet();
 		console.log(hello("Hello", "World"));
 	</script>
@@ -258,13 +258,13 @@ We would have to change the `index.html` to use the new module:
 </html>
 ```
 
-> NOTE: Spring Boot doesn't serve `*.mjs` with the correct mime type by default, so we need to use `.js` as a file extension for the module script. It's a hassle because Node.js likes `.mjs`.
+> NOTE: Spring Boot doesn't serve `*.mjs` with the correct mime type by default, so we need to use `.js` as a file extension for the module script, or register `mjs` explicitly (which we did in `DemoApplication` in this case).
 
-Loading this page the console will print "Hello World" twice. We can't call those functions directly from the console because they are in a module.
+Loading this page the console will print "Hello World" twice. You can't call those functions directly from the console because they are in a module, but you could set a breakpoint there in the browser and see them from the console when it stops.
 
 ## Generic Wrapper
 
-We can choose either the CommonJS or the ES6 route and write some code that uses the generated JavaScript from TeaVM. In ES6:
+To ensure that we can just use the generated Javascript without having to manually edit it, we can write some code that loads it and runs it. In ES6:
 
 ```javascript
 let main = {exports:{}};
@@ -288,4 +288,4 @@ export {greet, hello};
 export default greet;
 ```
 
-We can use that module in Node.js and in the browser as above.
+We can call that `bundle.mjs` and use it as a module in Node.js or in the browser as above.
