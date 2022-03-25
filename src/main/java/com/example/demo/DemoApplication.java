@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.boot.SpringApplication;
@@ -18,7 +19,9 @@ public class DemoApplication {
 	@Bean
 	public ResourceHandlerRegistrationCustomizer resourceCustomizer() {
 		return resources -> {
-			resources.setMediaTypes(Map.of("mjs", MediaType.valueOf("application/javascript")));
+			Map<String, MediaType> of = new HashMap<>();
+			of.put("mjs", MediaType.valueOf("application/javascript"));
+			resources.setMediaTypes(of);
 		};
 	}
 }
