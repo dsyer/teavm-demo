@@ -287,7 +287,7 @@ Loading this page the console will print "Hello World" twice. You can't call tho
 
 ## Generic Wrapper
 
-To ensure that we can just use the generated Javascript without having to manually edit it, we can write some code that loads it and runs it. In ES6:
+To ensure that you can just use the generated Javascript without having to manually edit it, you can write some code that loads it and runs it. In ES6:
 
 ```javascript
 let main = {exports:{}};
@@ -311,4 +311,71 @@ export {greet, hello};
 export default greet;
 ```
 
-We can call that `bundle.mjs` and use it as a module in Node.js or in the browser as above.
+You can call that `bundle.mjs` and use it as a module in Node.js or in the browser as above.
+
+## QuickJS
+
+[QuickJS](https://github.com/bellard/quickjs) is a JavaScript engine that can be compiled to a WASM. To set it up in Node.js:
+
+```javascript
+> var getQuickJS = await import("quickjs-emscripten")
+  var QuickJS = await getQuickJS.getQuickJS()
+  var vm = QuickJS.newContext()
+  const logHandle = vm.newFunction("log", (...args) => {
+    const nativeArgs = args.map(vm.dump)
+    console.log(...nativeArgs)
+  })
+```
+
+The `console` has to be imported if the script you run has any console output:
+
+```javascript
+> const consoleHandle = vm.newObject()
+  vm.setProp(consoleHandle, "log", logHandle)
+  vm.setProp(vm.global, "console", consoleHandle)
+  vm.setProp(consoleHandle, "info", logHandle)
+  vm.setProp(consoleHandle, "error", logHandle)
+  vm.setProp(consoleHandle, "warn", logHandle)
+  consoleHandle.dispose()
+  logHandle.dispose()
+```
+
+Then you can run the TeaVM `main()` and initialize the global state inside QuickJS:
+
+```javascript
+> var script = fs.readFileSync('target/classes/static/classes.js')
+  var result = vm.evalCode(new String(script) + ";main()")
+```
+
+From there you can call into functions defined in the script:
+
+```javascript
+> var greet = vm.evalCode("main.exports.hello(['Yo','Bro'])")
+  vm.dump(greet.value)
+'Yo Bro'
+> greet.value.dispose()
+```
+
+If you add a `validate()` function that accepts an object in Java:
+
+```java
+@Override
+public boolean validate(JSMapLike<JSObject> map) {
+	String value = JSObjects.toString(map.get("value"));
+	try {
+		return bundle.validate(value).isEmpty();
+	} catch (Throwable e) {
+		throw new IllegalStateException(e);
+	}
+}
+```
+
+then you can call it from Node.js:
+
+```javascript
+> var valid = vm.evalCode("main.exports.validate({'value':'awful'})")
+  vm.dump(valid.value)
+true
+> valid.value.dispose()
+> vm.dispose()
+```

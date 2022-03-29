@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+node_modules
+package-lock.json
+
 ### STS ###
 .apt_generated
 .classpath

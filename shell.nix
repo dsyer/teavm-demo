@@ -8,7 +8,7 @@ mkShell {
   ];
 
   shellHook = ''
-    echo JSweet Demo
+    echo TeaVM Demo
   '';
 
 }

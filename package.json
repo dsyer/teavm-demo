@@ -1,1 +1,1 @@
-{"type":"module"}
+{"type":"module","dependencies":{"quickjs-emscripten":"^0.20.0"}}
