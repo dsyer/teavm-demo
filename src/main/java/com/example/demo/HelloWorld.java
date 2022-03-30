@@ -1,9 +1,11 @@
 package com.example.demo;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import org.apache.commons.logging.LogFactory;
+import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
@@ -21,6 +23,9 @@ public class HelloWorld implements Exports {
 		export(new HelloWorld());
 		// System.out.println(Foo.class.getConstructor(String.class).newInstance("foo"));
 		LogFactory.getLog(HelloWorld.class).info("Logging: " + new Foo("foo"));
+		System.err.println(StreamUtils.copyToString(
+			HelloWorld.class.getClassLoader().getResourceAsStream("application.properties"),
+			Charset.defaultCharset()));
 	}
 
 	HelloWorld() {

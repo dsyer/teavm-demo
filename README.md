@@ -315,7 +315,21 @@ You can call that `bundle.mjs` and use it as a module in Node.js or in the brows
 
 ## QuickJS
 
-[QuickJS](https://github.com/bellard/quickjs) is a JavaScript engine that can be compiled to a WASM. To set it up in Node.js:
+[QuickJS](https://github.com/bellard/quickjs) is a lightweight JavaScript engine. You can run the TeaVM `main()` and initialize the global state inside QuickJS:
+
+```javascript
+$ qjs
+qjs > console.error = console.log
+  console.warning = console.log
+  console.info = console.log
+  console.finer = console.log
+qjs > __loadScript('./target/classes/static/classes.js'); main()
+Logging: Foo: value=foo
+qjs > main.exports.greet()
+Hello World
+```
+
+QuickJS has been compiled to a WASM at [quickjs-emscripten](https://www.npmjs.com/package/quickjs-emscripten). To set it up in Node.js:
 
 ```javascript
 > var getQuickJS = await import("quickjs-emscripten")
@@ -340,7 +354,7 @@ The `console` has to be imported if the script you run has any console output:
   logHandle.dispose()
 ```
 
-Then you can run the TeaVM `main()` and initialize the global state inside QuickJS:
+Then you can run the TeaVM `main()` in a WASM:
 
 ```javascript
 > var script = fs.readFileSync('target/classes/static/classes.js')
