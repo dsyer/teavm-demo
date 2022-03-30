@@ -393,3 +393,23 @@ true
 > valid.value.dispose()
 > vm.dispose()
 ```
+
+## Node.js VM
+
+Node.js has a "vm" module that lets you run code in its own context. It's much simpler than using QuickJS if you don't care about the WASM angle, e.g. if you don't need to run in a browser:
+
+```javascript
+> const vm = require('vm');
+  var context = {console}
+  vm.createContext(context)
+> var script = fs.readFileSync('target/classes/static/classes.js')
+  vm.runInContext(new String(script) + "\nmain()", context)
+Logging: Foo: value=foo
+foo=bar
+> vm.runInContext("main.exports.greet()", context)
+Hello World
+> vm.runInContext("main.exports.hello(['Yo', 'Bro'])", context)
+'Yo Bro'
+> vm.runInContext("main.exports.validate({'value':'foo'})", context)
+true
+```
