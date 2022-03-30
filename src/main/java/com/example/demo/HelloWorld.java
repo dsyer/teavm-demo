@@ -11,6 +11,7 @@ import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.core.JSMapLike;
 import org.teavm.jso.core.JSObjects;
+import org.teavm.jso.core.JSString;
 
 import am.ik.yavi.builder.ValidatorBuilder;
 import am.ik.yavi.core.ViolationMessage;
@@ -53,6 +54,13 @@ public class HelloWorld implements Exports {
 		}
 	}
 
+	@Override
+	public JSMapLike<JSObject> xform(JSMapLike<JSObject> map) {
+		map.set("message", JSString.valueOf(hello("Yo", "Bro")));
+		return map;
+	}
+
+
 	@JSBody(params = "arg", script = "main.exports = arg;")
 	public static native void export(Exports arg);
 }
@@ -63,6 +71,9 @@ interface Exports extends JSObject {
 	String hello(String... args);
 
 	boolean validate(JSMapLike<JSObject> map);
+
+	JSMapLike<JSObject> xform(JSMapLike<JSObject> map);
+
 }
 
 class Foo {
