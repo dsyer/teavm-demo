@@ -394,7 +394,7 @@ true
 > vm.dispose()
 ```
 
-## Node.js VM
+## Running Untrusted Code in Node.js VM
 
 Node.js has a "vm" module that lets you run code in its own context. It's much simpler than using QuickJS if you don't care about the WASM angle, e.g. if you don't need to run in a browser:
 
@@ -413,3 +413,49 @@ Hello World
 > vm.runInContext("main.exports.validate({'value':'foo'})", context)
 true
 ```
+
+## Running Untrusted Code in Java
+
+We could try running our generated code in the JDK JavaScript engine:
+
+```java
+jshell> import javax.script.*;
+  System.setProperty("nashorn.args", "--language=es6");
+  ScriptEngineManager manager = new ScriptEngineManager();
+  ScriptEngine engine = manager.getEngineByName("JavaScript");
+jshell> import org.springframework.util.*; import java.nio.charset.Charset;
+  var script = var script = StreamUtils.copyToString(new FileInputStream("target/classes/static/classes.js"), Charset.defaultCharset())
+```
+
+but life is not that easy:
+
+```java
+jshell> engine.eval(script + "\nmain()")
+|  Exception javax.script.ScriptException: Error: Java exception thrown in <eval> at line number 8074 at column number 8
+|        at NashornScriptEngine.throwAsScriptException (NashornScriptEngine.java:477)
+|        at NashornScriptEngine.evalImpl (NashornScriptEngine.java:461)
+|        at NashornScriptEngine.evalImpl (NashornScriptEngine.java:413)
+|        at NashornScriptEngine.evalImpl (NashornScriptEngine.java:409)
+|        at NashornScriptEngine.eval (NashornScriptEngine.java:162)
+|        at AbstractScriptEngine.eval (AbstractScriptEngine.java:264)
+|        at (#9:1)
+|  Caused by: jdk.nashorn.internal.runtime.ECMAException: Error: Java exception thrown
+|        at NativeError.initException (NativeError.java:135)
+|        at NativeError.captureStackTrace (NativeError.java:148)
+|        at Script$Recompilation$526$7639A$\^eval\_$cu1$restOf.L:3#$rt_exception (<eval>:253)
+|        at Script$Recompilation$524$7530A$\^eval\_.L:3#$rt_throw (<eval>:245)
+|        at Script$Recompilation$523$227482AA$\^eval\_$cu1$restOf.L:3#cef_Foo__init_0 (<eval>:6184)
+|        at Script$Recompilation$515$227363A$\^eval\_.L:3#cef_Foo__init_ (<eval>:6180)
+|        at Script$Recompilation$514$246429A$\^eval\_$cu1$restOf.L:3#ced_HelloWorld_main (<eval>:6770)
+|        at Script$Recompilation$239$19495$\^eval\_.L:3#$rt_mainStarter#L:586#L:594 (<eval>:595)
+|        at Script$Recompilation$238$327108AA$\^eval\_.L:3#$rt_startThread (<eval>:8067)
+|        at Script$Recompilation$237$19218AA$\^eval\_$cu1$restOf.L:3#$rt_mainStarter#L:586 (<eval>:594)
+|        at Script$Recompilation$1$\^eval\_.:program (<eval>:8100)
+|        at ScriptFunctionData.invoke (ScriptFunctionData.java:655)
+|        at ScriptFunction.invoke (ScriptFunction.java:513)
+|        at ScriptRuntime.apply (ScriptRuntime.java:527)
+|        at NashornScriptEngine.evalImpl (NashornScriptEngine.java:456)
+|        ...
+```
+
+Nashorn is deprecated in Java 11 anyway, so it's probably just as well we can't do this. We could maybe run QuickJS in a WASM but without the JavaScript bindings in `quickjs-emscripten` it will be a struggle.
