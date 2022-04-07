@@ -459,3 +459,24 @@ jshell> engine.eval(script + "\nmain()")
 ```
 
 Nashorn is deprecated in Java 11 anyway, so it's probably just as well we can't do this. We could maybe run QuickJS in a WASM but without the JavaScript bindings in `quickjs-emscripten` it will be a struggle.
+
+## WIP
+
+```
+$ emcc -mmultivalue -Xclang -target-abi -Xclang experimental-mv -Os -s STANDALONE_WASM -s EXPORTED_FUNCTIONS="['_read', '_write', '_del', '_create']" -Wl,--no-entry js.c external/cJSON.c -o js.wasm
+```
+
+```javascript
+> var wasm = await WebAssembly.instantiate(fs.readFileSync('js.wasm'));
+  var { memory, read, write, del } = wasm.instance.exports;
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
+> var json = '{"hello":"world"}';
+  var buffer = new Uint8Array(memory.buffer, 0, json.length)
+  buffer.set(encoder.encode(json),0)
+  var jb = read(0)
+> jb
+[ 1701323387, 577727596, 1870078522, 577006706, 125, 0, 0, 0 ]
+> memory.buffer.byteLength
+16777216
+```
