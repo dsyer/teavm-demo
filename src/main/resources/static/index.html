@@ -3,10 +3,8 @@
 <body>
 	<h2>Hello</h2>
 	<script type="module">
-		import { greet, hello, validate } from './bundle.mjs';
-		greet();
-		console.log(hello("Hello", "World"));
-		console.log("Valid: " + validate({"value":"foo"}))
+		import { echo } from './bundle.mjs';
+		console.log("Echo: " + echo())
 	</script>
 </body>
 

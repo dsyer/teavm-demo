@@ -81,6 +81,7 @@
 							<targetDirectory>${project.build.directory}/classes/static</targetDirectory>
 							<mainClass>com.example.demo.HelloWorld</mainClass>
 							<minifying>false</minifying>
+							<targetType>WEBASSEMBLY</targetType>
 						</configuration>
 					</execution>
 				</executions>
